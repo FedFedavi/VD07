@@ -1,23 +1,23 @@
 from flask import Flask, render_template, redirect, url_for
-from flask_wtf import FlaskForm # Это базовый класс для создания форм
-from wtforms import StringField, SubmitField # Это классы для создания полей внутри формы
-from wtforms.validators import DataRequired # Валидатор, нужный для проверки
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
+from wtforms.validators import DataRequired
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'mysecret'
 
-class NameForm(FlaskForm): # Используем FlaskForm в качестве родительского класса
+class NameForm(FlaskForm):
     name = StringField('What is your name?', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
-@app.route('/', methods=['GET', 'POST']) #  С помощью этого маршрута мы сможем и отправлять, и получать информацию
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    form = NameForm() #  Создаём объект формы
-    if form.validate_on_submit(): # Проверка того, прошла ли форма валидацию и вообще отправлена ли она
-        name = form.name.data #  Получаем значение из формы, информацию из этого значения. Сохраняем в переменную
-        return redirect(url_for('hello', name=name)) # Отправляем пользователя на новую страницу, передаём полученное имя
+    form = NameForm()
+    if form.validate_on_submit():
+        name = form.name.data
+        return redirect(url_for('hello', name=name))
     return render_template('index.html', form=form)
 
 @app.route('/hello/<name>')
