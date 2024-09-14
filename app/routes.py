@@ -21,7 +21,7 @@ def register():
         db.session.commit()
         flash('Ваш аккаунт создан', 'success')
         return redirect(url_for('login'))
-    return render_template('register.html')
+    return render_template('register.html', form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -31,7 +31,7 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
-            login_user(user, remember=form.remember_me.data)
+            login_user(user, remember=form.remember.data)
             return redirect(url_for('home'))
         else:
             flash('Введены неверные данные', 'danger')
